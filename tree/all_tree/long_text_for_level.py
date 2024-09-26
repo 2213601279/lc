@@ -150,6 +150,33 @@ class SolutionaverageOfLevels:
 
         return averages
 
+    def largestValues(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+
+        result = []
+        queue = collections.deque([root])
+
+        while queue:
+            level_size = len(queue)
+            max_val = float('-inf')
+
+            for _ in range(level_size):
+                node = queue.popleft()
+                if type(node.val) != int:
+                    node.val = int(node.val.split('-> ')[0])
+                max_val = max(max_val, node.val)
+
+                if node.left:
+                    queue.append(node.left)
+
+                if node.right:
+                    queue.append(node.right)
+
+            result.append(max_val)
+
+        return result
+
 
 if __name__ == '__main__':
     # root = TreeNode(1)
@@ -171,4 +198,6 @@ if __name__ == '__main__':
     print(ax)
     print()
     print(Solution_rightSideView().rightSideView(root))
-    print(SolutionaverageOfLevels().averageOfLevels(root))
+    # print(SolutionaverageOfLevels().averageOfLevels(root))
+
+    print(SolutionaverageOfLevels().largestValues(root))
