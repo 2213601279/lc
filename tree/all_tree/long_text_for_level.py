@@ -55,22 +55,100 @@ class Solution2:
 
 
 def create_deep_tree(depth):
+    """
+    创建二叉树
+    :param depth:
+    :return:
+    """
     if depth == 0:
         return None
 
     root = TreeNode(0)
     current_level = [root]
-
+    count = 0
     for i in range(1, depth):
         next_level = []
         for node in current_level:
-            node.left = TreeNode(str(i) + '-> ' + 'left')
-            node.right = TreeNode(str(i) + '-> ' + 'right')
+            count += 1
+            node.left = TreeNode(str(count) + '-> ' + 'left')
+            count += 1
+            node.right = TreeNode(str(count) + '-> ' + 'right')
             next_level.append(node.left)
             next_level.append(node.right)
         current_level = next_level
 
     return root
+
+
+class Solution_bottom_to_top:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return []
+        queue = collections.deque([root])
+        result = []
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                cur = queue.popleft()
+                level.append(cur.val)
+                if cur.left:
+                    queue.append(cur.left)
+                if cur.right:
+                    queue.append(cur.right)
+            result.append(level)
+        return result[::-1]
+
+
+class Solution_rightSideView:
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+
+        queue = collections.deque([root])
+        right_view = []
+
+        while queue:
+            level_size = len(queue)
+
+            for i in range(level_size):
+                node = queue.popleft()
+
+                if i == level_size - 1:
+                    right_view.append(node.val)
+
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+
+        return right_view
+
+
+class SolutionaverageOfLevels:
+    def averageOfLevels(self, root: TreeNode) -> List[float]:
+        if not root:
+            return []
+
+        queue = collections.deque([root])
+        averages = []
+
+        while queue:
+            size = len(queue)
+            level_sum = 0
+
+            for i in range(size):
+                node = queue.popleft()
+
+                level_sum += node.val
+                print(f" level  -> {node.val}")
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+
+            averages.append(level_sum / size)
+
+        return averages
 
 
 if __name__ == '__main__':
@@ -81,8 +159,17 @@ if __name__ == '__main__':
     # root.left.right = TreeNode(5)
     # root.right.right = TreeNode(6)
     root = create_deep_tree(4)
+    print(root)
     a = Solution().levelOrder(root)
     print(a)
     solution = Solution2()
     result = solution.levelOrder(root)
     print(result)  # 输出应该是 [[1], [2, 3], [4, 5, 6]]
+
+    print(result[::-1])  # 输出应该是 [[1], [2, 3], [4, 5, 6]]
+
+    ax = Solution_bottom_to_top().levelOrderBottom(root)
+    print(ax)
+    print()
+    print(Solution_rightSideView().rightSideView(root))
+    print(SolutionaverageOfLevels().averageOfLevels(root))
