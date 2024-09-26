@@ -138,9 +138,9 @@ class SolutionaverageOfLevels:
 
             for i in range(size):
                 node = queue.popleft()
-
+                if type(node.val) != int:
+                    node.val = int(node.val.split('-> ')[0])
                 level_sum += node.val
-                print(f" level  -> {node.val}")
                 if node.left:
                     queue.append(node.left)
                 if node.right:
@@ -159,7 +159,6 @@ if __name__ == '__main__':
     # root.left.right = TreeNode(5)
     # root.right.right = TreeNode(6)
     root = create_deep_tree(4)
-    print(root)
     a = Solution().levelOrder(root)
     print(a)
     solution = Solution2()
